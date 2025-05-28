@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg"/> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="module" src="/src/main.js" defer></script>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Vite App</title>
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body class="h-screen flex justify-center items-center bg-gray-100">
+    <div class="bg-[rgba(249,247,245,255)] h-[600px] w-[1400px] flex rounded-lg shadow-2xl overflow-hidden">
+      <!-- Sidebar -->
+      <div class="w-36 bg-[#f3f1ec] flex items-center justify-center">
+        <div class="h-96 flex flex-col justify-evenly gap-2">
+          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-messages">
+            <i class="fa-solid fa-message"></i>
+            <p class="text-xs">Messages</p>
+          </button>
+          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-groupes">
+            <i class="fa-solid fa-user-group"></i>
+            <p class="text-xs">Groupes</p>
+          </button>
+          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-diffusion">
+            <i class="fa-solid fa-arrows-turn-to-dots"></i>
+            <p class="text-xs">Diffusion</p>
+          </button>
+          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-archives">
+            <i class="fa-solid fa-box-archive"></i>
+            <p class="text-xs">Archives</p>
+          </button>
+          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-nouveau">
+            <i class="fa-solid fa-plus"></i>
+            <p class="text-xs">Nouveau</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat List -->
+      <div class="w-96 flex flex-col bg-[rgba(249,247,245,255)]">
+        <h1 class="border-b border-yellow-600 ml-4 mb-3 py-3 font-semibold">Discussions</h1>
+        <input type="search" placeholder="Recherche" class="rounded-md w-[330px] ml-4 p-2 border border-yellow-600 focus:border-orange-500 focus:outline-none" id="search-input">
+        <button class="border border-orange-400 w-40 mx-auto mt-5 rounded bg-orange-400 py-2 px-4 text-white hover:scale-105 transition-transform duration-200 hidden" id="nouveau-groupe-btn">Nouveau groupe</button>
+        
+        <div class="flex-grow overflow-y-auto px-4 py-2" id="contenant">
+          <!-- Contact Form -->
+          <div class="contact-form hidden flex-col items-center gap-3 py-5" id="contact-form">
+            <input type="text" class="w-64 p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-nom" placeholder="Entrez votre nom">
+            <div class="error-message text-red-600 text-sm hidden" id="error-nom">Le nom ne peut contenir que des lettres</div>
+            <input type="text" class="w-64 p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-num" placeholder="Entrez votre numéro">
+            <div class="error-message text-red-600 text-sm hidden" id="error-num">Le numéro ne peut contenir que des chiffres</div>
+            <button class="bg-orange-400 text-white px-6 py-2 rounded-lg hover:scale-110 transition-transform duration-200" id="btn-creer">Créer</button>
+          </div>
+
+          <!-- Group Creation -->
+          <div class="group-creation hidden py-5" id="group-creation">
+            <h3 class="font-semibold mb-3">Créer un groupe</h3>
+            <input type="text" class="w-full p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none mb-3" id="group-name" placeholder="Nom du groupe">
+            <div class="max-h-72 overflow-y-auto mb-3" id="group-contacts"></div>
+            <button class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition-colors" id="create-group-btn">Créer le groupe</button>
+          </div>
+
+          <!-- Diffusion Area -->
+          <div class="diffusion-area hidden py-5" id="diffusion-area">
+            <h3 class="font-semibold mb-3">Message de diffusion</h3>
+            <textarea class="w-full h-20 p-3 border border-yellow-600 rounded-lg resize-y mb-3 focus:border-orange-500 focus:outline-none" id="diffusion-message" placeholder="Tapez votre message..."></textarea>
+            <div class="max-h-48 overflow-y-auto mb-3" id="diffusion-contacts"></div>
+            <button class="bg-slate-300 text-white px-5 py-2 rounded-lg hover:bg-orange-400 transition-colors h-20" id="send-diffusion-btn">Envoyer à tous</button>
+          </div>
+
+          <!-- Contacts/Groups List -->
+          <div id="contacts-list"></div>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="flex-grow bg-[rgba(239,231,215,255)] flex flex-col">
+        <div class="border-b-2 border-white h-12 flex justify-between items-center px-4">
+          <div class="rounded-full w-10 h-10 bg-gray-500"></div>
+          <div class="flex gap-2">
+            <button class="border border-orange-500 rounded-full w-10 h-10 flex items-center justify-center text-orange-500 bg-white hover:scale-110 transition-transform duration-200" id="btn-delete">
+              <i class="fa-solid fa-delete-left"></i>
+            </button>
+            <button class="border border-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-gray-500 bg-white hover:scale-110 transition-transform duration-200" id="btn-archive">
+              <i class="fa-solid fa-box-archive"></i>
+            </button>
+            <button class="border border-black rounded-full w-10 h-10 flex items-center justify-center text-black bg-white hover:scale-110 transition-transform duration-200" id="btn-block">
+              <i class="fa-solid fa-stop"></i>
+            </button>
+            <button class="border border-red-700 rounded-full w-10 h-10 flex items-center justify-center text-red-700 bg-white hover:scale-110 transition-transform duration-200" id="btn-trash">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="flex-grow p-4 overflow-y-auto flex flex-col gap-2" id="messages-area">
+          <!-- Messages will be added here dynamically -->
+        </div>
+        
+        <div class="bg-white p-2 flex items-center gap-2">
+          <input type="text" class="flex-grow bg-[rgba(249,247,245,255)] h-8 border border-yellow-600 rounded-full px-3 focus:border-orange-500 focus:outline-none" id="message-input" placeholder="Tapez votre message...">
+          <button class="bg-green-600 w-10 h-10 rounded-full border-none text-white flex items-center justify-center hover:bg-green-700 transition-colors cursor-pointer" id="send-btn">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

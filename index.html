@@ -16,48 +16,80 @@
       }
     </style>
   </head>
-  <body class="h-screen flex justify-center items-center bg-gray-100">
-    <div class="bg-[rgba(249,247,245,255)] h-[600px] w-[1400px] flex rounded-lg shadow-2xl overflow-hidden">
+  <body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: rgb(249 115 22);">Connexion</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur:</label>
+          <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe:</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="btn-primary">Se connecter</button>
+      </form>
+      <div id="login-error" class="text-red-600 text-sm hidden" style="margin-top: 1rem; text-align: center;">
+        Nom d'utilisateur ou mot de passe incorrect
+      </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="container hidden">
+      <button class="logout-btn" id="logout-btn">
+        <i class="fa-solid fa-sign-out-alt"></i> Déconnexion
+      </button>
+      
+      
       <!-- Sidebar -->
-      <div class="w-36 bg-[#f3f1ec] flex items-center justify-center">
-        <div class="h-96 flex flex-col justify-evenly gap-2">
-          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-messages">
+      <div class="sidebar">
+        <div style="height: 384px; display: flex; flex-direction: column; justify-content: space-evenly; gap: 8px;">
+          <button class="nav-btn active" id="btn-messages">
             <i class="fa-solid fa-message"></i>
-            <p class="text-xs">Messages</p>
+            <p>Messages</p>
           </button>
-          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-groupes">
+          <button class="nav-btn" id="btn-groupes">
             <i class="fa-solid fa-user-group"></i>
-            <p class="text-xs">Groupes</p>
+            <p>Groupes</p>
           </button>
-          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-diffusion">
+          <button class="nav-btn" id="btn-diffusion">
             <i class="fa-solid fa-arrows-turn-to-dots"></i>
-            <p class="text-xs">Diffusion</p>
+            <p>Diffusion</p>
           </button>
-          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-archives">
+          <button class="nav-btn" id="btn-archives">
             <i class="fa-solid fa-box-archive"></i>
-            <p class="text-xs">Archives</p>
+            <p>Archives</p>
           </button>
-          <button class="nav-btn border border-yellow-600 p-3 rounded-md hover:bg-orange-400 transition-colors duration-200 flex flex-col items-center gap-1" id="btn-nouveau">
+          <button class="nav-btn" id="btn-nouveau">
             <i class="fa-solid fa-plus"></i>
-            <p class="text-xs">Nouveau</p>
+            <p>Nouveau</p>
           </button>
         </div>
       </div>
 
       <!-- Chat List -->
-      <div class="w-96 flex flex-col bg-[rgba(249,247,245,255)]">
-        <h1 class="border-b border-yellow-600 ml-4 mb-3 py-3 font-semibold">Discussions</h1>
-        <input type="search" placeholder="Recherche" class="rounded-md w-[330px] ml-4 p-2 border border-yellow-600 focus:border-orange-500 focus:outline-none" id="search-input">
-        <button class="border border-orange-400 w-40 mx-auto mt-5 rounded bg-orange-400 py-2 px-4 text-white hover:scale-105 transition-transform duration-200 hidden" id="nouveau-groupe-btn">Nouveau groupe</button>
+      <div class="chat-list">
+        <h1>Discussions <span id="current-user-name" style="font-size: 0.875rem; color: rgb(75 85 99);"></span></h1>
+        <input type="search" placeholder="Recherche (tapez * pour tout afficher)" class="search-input" id="search-input">
+        <button class="nouveau-groupe-btn hidden" id="nouveau-groupe-btn">Nouveau groupe</button>
         
-        <div class="flex-grow overflow-y-auto px-4 py-2" id="contenant">
+        <div class="content-area" id="contenant">
           <!-- Contact Form -->
-          <div class="contact-form hidden flex-col items-center gap-3 py-5" id="contact-form">
-            <input type="text" class="w-64 p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-nom" placeholder="Entrez votre nom">
-            <div class="error-message text-red-600 text-sm hidden" id="error-nom">Le nom ne peut contenir que des lettres</div>
-            <input type="text" class="w-64 p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-num" placeholder="Entrez votre numéro">
-            <div class="error-message text-red-600 text-sm hidden" id="error-num">Le numéro ne peut contenir que des chiffres</div>
-            <button class="bg-orange-400 text-white px-6 py-2 rounded-lg hover:scale-110 transition-transform duration-200" id="btn-creer">Créer</button>
+          <div class="contact-form hidden flex-col items-center gap-3 py-5" id="contact-form" style="background: #fff7ed; border-radius: 12px; box-shadow: 0 4px 24px rgba(249,115,22,0.08); padding: 2rem 2.5rem; border: 1px solid rgb(251 146 60); max-width: 350px; margin: 2rem auto;">
+            <h2 style="color: rgb(249 115 22); font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 1px;">Nouveau contact</h2>
+            <div class="form-group" style="width: 100%;">
+              <label for="input-nom" style="color: rgb(202 138 4); font-weight: 600; margin-bottom: 0.5rem;">Nom</label>
+              <input type="text" class="w-full p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-nom" placeholder="Entrez le nom" style="margin-bottom: 0.25rem;">
+              <div class="error-message text-red-600 text-sm hidden" id="error-nom">Le nom ne peut contenir que des lettres</div>
+            </div>
+            <div class="form-group" style="width: 100%;">
+              <label for="input-num" style="color: rgb(202 138 4); font-weight: 600; margin-bottom: 0.5rem;">Numéro</label>
+              <input type="text" class="w-full p-3 border border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none" id="input-num" placeholder="Entrez le numéro" style="margin-bottom: 0.25rem;">
+              <div class="error-message text-red-600 text-sm hidden" id="error-num">Le numéro ne peut contenir que des chiffres</div>
+            </div>
+            <button class="bg-orange-400 text-white px-6 py-2 rounded-lg hover:scale-110 transition-transform duration-200 font-semibold" id="btn-creer" style="margin-top: 1rem; width: 100%; box-shadow: 0 2px 8px rgba(249,115,22,0.08);">Créer</button>
           </div>
 
           <!-- Group Creation -->
@@ -68,10 +100,16 @@
             <button class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition-colors" id="create-group-btn">Créer le groupe</button>
           </div>
 
+          <!-- Group Management -->
+          <div class="group-management hidden py-5" id="group-management">
+            <h3 class="font-semibold mb-3">Gestion du groupe</h3>
+            <div id="group-members-list"></div>
+          </div>
+
           <!-- Diffusion Area -->
           <div class="diffusion-area hidden py-5" id="diffusion-area">
             <h3 class="font-semibold mb-3">Message de diffusion</h3>
-            <textarea class="w-full h-20 p-3 border border-yellow-600 rounded-lg resize-y mb-3 focus:border-orange-500 focus:outline-none" id="diffusion-message" placeholder="Tapez votre message..."></textarea>
+            <textarea class="w-full h-20 p-3 border border-orange-300 rounded-lg resize-y mb-3 focus:border-orange-500 focus:outline-none" id="diffusion-message" placeholder="Tapez votre message..."></textarea>
             <div class="max-h-48 overflow-y-auto mb-3" id="diffusion-contacts"></div>
             <button class="bg-slate-300 text-white px-5 py-2 rounded-lg hover:bg-orange-400 transition-colors h-20" id="send-diffusion-btn">Envoyer à tous</button>
           </div>
@@ -82,36 +120,51 @@
       </div>
 
       <!-- Chat Area -->
-      <div class="flex-grow bg-[rgba(239,231,215,255)] flex flex-col">
-        <div class="border-b-2 border-white h-12 flex justify-between items-center px-4">
-          <div class="rounded-full w-10 h-10 bg-gray-500"></div>
-          <div class="flex gap-2">
-            <button class="border border-orange-500 rounded-full w-10 h-10 flex items-center justify-center text-orange-500 bg-white hover:scale-110 transition-transform duration-200" id="btn-delete">
+      <div class="chat-area">
+        <div class="chat-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="avatar"></div>
+            <div id="chat-title" style="font-weight: 600;"></div>
+          </div>
+          <div class="chat-controls">
+            <button class="control-btn" style="border-color: rgb(249 115 22); color: rgb(249 115 22);" id="btn-delete">
               <i class="fa-solid fa-delete-left"></i>
             </button>
-            <button class="border border-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-gray-500 bg-white hover:scale-110 transition-transform duration-200" id="btn-archive">
+            <button class="control-btn" style="border-color: rgb(107 114 128); color: rgb(107 114 128);" id="btn-archive">
               <i class="fa-solid fa-box-archive"></i>
             </button>
-            <button class="border border-black rounded-full w-10 h-10 flex items-center justify-center text-black bg-white hover:scale-110 transition-transform duration-200" id="btn-block">
+            <button class="control-btn" style="border-color: black; color: black;" id="btn-block">
               <i class="fa-solid fa-stop"></i>
             </button>
-            <button class="border border-red-700 rounded-full w-10 h-10 flex items-center justify-center text-red-700 bg-white hover:scale-110 transition-transform duration-200" id="btn-trash">
+            <button class="control-btn" style="border-color: rgb(185 28 28); color: rgb(185 28 28);" id="btn-trash">
               <i class="fa-solid fa-trash"></i>
+            </button>
+            <button class="control-btn hidden" style="border-color: rgb(59 130 246); color: rgb(59 130 246);" id="btn-manage-group">
+              <i class="fa-solid fa-cog"></i>
             </button>
           </div>
         </div>
         
-        <div class="flex-grow p-4 overflow-y-auto flex flex-col gap-2" id="messages-area">
+        <div class="messages-area" id="messages-area">
           <!-- Messages will be added here dynamically -->
         </div>
         
-        <div class="bg-white p-2 flex items-center gap-2">
-          <input type="text" class="flex-grow bg-[rgba(249,247,245,255)] h-8 border border-yellow-600 rounded-full px-3 focus:border-orange-500 focus:outline-none" id="message-input" placeholder="Tapez votre message...">
-          <button class="bg-green-600 w-10 h-10 rounded-full border-none text-white flex items-center justify-center hover:bg-green-700 transition-colors cursor-pointer" id="send-btn">
+        <div class="message-input-area">
+          <input type="text" class="message-input" id="message-input" placeholder="Tapez votre message...">
+          <button class="send-btn" id="send-btn">
             <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <button class="send-btn" id="broadcast-btn" title="Diffuser à tous" style="background: rgb(251 146 60);">
+            <i class="fa-solid fa-bullhorn"></i>
           </button>
         </div>
       </div>
+
+      <!-- Mini popup pour notifications -->
+      <div id="mini-popup" style="position: fixed; right: 32px; bottom: 32px; min-width: 220px; background: rgb(251 146 60); color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 24px rgba(249,115,22,0.18); font-weight: 600; font-size: 1rem; z-index: 9999; display: none; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="mini-popup-message"></span>
+      </div>
     </div>
-  </body>
+
 </html>
